@@ -1,0 +1,4 @@
+
+
+def BestMove(gs):
+    pass

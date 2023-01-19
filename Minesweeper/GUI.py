@@ -1,7 +1,7 @@
 import pygame as p
 import Minesweeper.Config as Config
 import Minesweeper.MinesweeperEngien as Engien
-
+import Minesweeper.MinnesweeperAI as AI
 
 BOARD_HIGHT = Config.BOARD_HIGHT
 BOARD_WIDTH = Config.BOARD_WIDTH
@@ -15,6 +15,7 @@ p.init()
 def StartGame():
     
     gs = Engien.MinesweeperEngien()
+    gs.fillBoard()
     FirstClick = False
     
     Screen = p.display.set_mode((BOARD_WIDTH,BOARD_HIGHT))
@@ -56,7 +57,7 @@ def StartGame():
         
 def drawGameState(screen,gs):
     Board = gs.GetBoard()
-    font = p.font.SysFont('Arial', 30)
+    font = p.font.SysFont('Arial', 10)
     for r in range(DIMENTION):
         for c in range(DIMENTION):
             if Board[r][c] == '-':

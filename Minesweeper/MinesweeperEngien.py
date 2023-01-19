@@ -3,29 +3,21 @@ import random
 
 class MinesweeperEngien:
     def __init__(self):
-        self.GameBoard = [['-','-','-','-','-','-','-','-','-'],
-                        ['-','-','-','-','-','-','-','-','-'],
-                        ['-','-','-','-','-','-','-','-','-'],
-                        ['-','-','-','-','-','-','-','-','-'],
-                        ['-','-','-','-','-','-','-','-','-'],
-                        ['-','-','-','-','-','-','-','-','-'],
-                        ['-','-','-','-','-','-','-','-','-'],
-                        ['-','-','-','-','-','-','-','-','-'],
-                        ['-','-','-','-','-','-','-','-','-']]
-
-
-        self.DisplayBoard = [['-','-','-','-','-','-','-','-','-'],
-                            ['-','-','-','-','-','-','-','-','-'],
-                            ['-','-','-','-','-','-','-','-','-'],
-                            ['-','-','-','-','-','-','-','-','-'],
-                            ['-','-','-','-','-','-','-','-','-'],
-                            ['-','-','-','-','-','-','-','-','-'],
-                            ['-','-','-','-','-','-','-','-','-'],
-                            ['-','-','-','-','-','-','-','-','-'],
-                            ['-','-','-','-','-','-','-','-','-']]
-        self.Minse = Config.MINES
+        self.GameBoard = []
+        self.DisplayBoard = []
+        self.Mines = Config.MINES
         self.GameStatus = True
         self.Win = False
+    
+    def fillBoard(self):
+        for r in range(Config.DEMANTION):
+            self.DisplayBoard.append([])
+            self.GameBoard.append([])
+            for c in range(Config.DEMANTION):
+                self.GameBoard[r].append('-')
+                self.DisplayBoard[r].append('-')
+                
+    
     
     def GetBoard(self):
         return self.DisplayBoard
@@ -102,10 +94,10 @@ class MinesweeperEngien:
     def createBoard(self,sr,sc):
         directions = ((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1))
         Mines = 0
-        while Mines < 10:
+        while Mines < self.Mines:
             r = random.randint(0,Config.DEMANTION-1)
             c = random.randint(0,Config.DEMANTION-1)
-            if  ((r != sr) or (r != sr+1) or (r != sr-1)) and ((c != sc ) or (c != sc+1) or (c != sc-1)) and self.GameBoard[r][c] != '*':
+            if  ((r != sr) and (r != sr+1) and (r != sr-1)) and ((c != sc ) and (c != sc+1) and (c != sc-1)) and self.GameBoard[r][c] != '*':
                 self.GameBoard[r][c] = '*'
                 for d in directions:
                     endRow = r + d[0]
