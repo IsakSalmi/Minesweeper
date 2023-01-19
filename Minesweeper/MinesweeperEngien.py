@@ -25,6 +25,7 @@ class MinesweeperEngien:
                             ['-','-','-','-','-','-','-','-','-']]
         self.Minse = Config.MINES
         self.GameStatus = True
+        self.Win = False
     
     def GetBoard(self):
         return self.DisplayBoard
@@ -37,15 +38,15 @@ class MinesweeperEngien:
         else:
             self.GameBoard[sr][sc] == '*'
             self.GameStatus = False
-        
+            
         if self.GameStatus:
             directions = ((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1))
             AvSQ = []
-            AvSQ.append((sr,sc))
+            if(self.GameBoard[sr][sc] == '-'):
+                AvSQ.append((sr,sc))
             while len(AvSQ) != 0:
                 r = AvSQ[0][0]
                 c = AvSQ[0][1]
-                print(r,c)
                 for d in directions:
                     endRow = r + d[0]
                     endCol = c + d[1]
@@ -57,9 +58,46 @@ class MinesweeperEngien:
                         elif self.GameBoard[endRow][endCol] != '*':
                             self.DisplayBoard[endRow][endCol] = self.GameBoard[endRow][endCol]
                 AvSQ.pop(0)
+
         
-                
-            
+        if self.won():
+            self.Win = True
+    
+    
+    def won(self):
+        coutn = 0
+        for r in range(Config.DEMANTION):
+            for c in range(Config.DEMANTION):
+                if self.DisplayBoard[r][c] == '-' or self.DisplayBoard[r][c] == 'F':
+                    coutn += 1
+                    
+        if coutn == Config.MINES:
+            return True
+        return False    
+        
+    def ResetGame(self):
+        self.GameBoard = [['-','-','-','-','-','-','-','-','-'],
+                        ['-','-','-','-','-','-','-','-','-'],
+                        ['-','-','-','-','-','-','-','-','-'],
+                        ['-','-','-','-','-','-','-','-','-'],
+                        ['-','-','-','-','-','-','-','-','-'],
+                        ['-','-','-','-','-','-','-','-','-'],
+                        ['-','-','-','-','-','-','-','-','-'],
+                        ['-','-','-','-','-','-','-','-','-'],
+                        ['-','-','-','-','-','-','-','-','-']]
+
+
+        self.DisplayBoard = [['-','-','-','-','-','-','-','-','-'],
+                            ['-','-','-','-','-','-','-','-','-'],
+                            ['-','-','-','-','-','-','-','-','-'],
+                            ['-','-','-','-','-','-','-','-','-'],
+                            ['-','-','-','-','-','-','-','-','-'],
+                            ['-','-','-','-','-','-','-','-','-'],
+                            ['-','-','-','-','-','-','-','-','-'],
+                            ['-','-','-','-','-','-','-','-','-'],
+                            ['-','-','-','-','-','-','-','-','-']]
+        self.GameStatus = True
+        self.Win = False    
 
     def createBoard(self,sr,sc):
         directions = ((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1))
@@ -67,7 +105,7 @@ class MinesweeperEngien:
         while Mines < 10:
             r = random.randint(0,Config.DEMANTION-1)
             c = random.randint(0,Config.DEMANTION-1)
-            if  (r != sr) and (c != sc) and self.GameBoard[r][c] != '*':
+            if  ((r != sr) or (r != sr+1) or (r != sr-1)) and ((c != sc ) or (c != sc+1) or (c != sc-1)) and self.GameBoard[r][c] != '*':
                 self.GameBoard[r][c] = '*'
                 for d in directions:
                     endRow = r + d[0]
@@ -90,7 +128,8 @@ class MinesweeperEngien:
             print(self.GameBoard[r])
 
     def flagSQ(self, r, c):
-        self.DisplayBoard[r][c] = 'F'
+        if self.DisplayBoard[r][c] == '-':
+            self.DisplayBoard[r][c] = 'F'
     
     
     

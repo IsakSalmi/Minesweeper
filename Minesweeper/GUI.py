@@ -26,6 +26,10 @@ def StartGame():
         for e in p.event.get():
             if e.type == p.QUIT:
                 start = False
+            elif e.type == p.KEYDOWN:
+                if e.key == p.K_r:
+                    gs.ResetGame()
+                    FirstClick = False
             elif e.type == p.MOUSEBUTTONDOWN:
                 if gs.GameStatus:
                     if e.button == 1:
@@ -66,3 +70,14 @@ def drawGameState(screen,gs):
                 textLocation = p.Rect((SQ_SIZE * c), (SQ_SIZE * r), (SQ_SIZE + SQ_SIZE * c), (SQ_SIZE + SQ_SIZE * r))
                 p.draw.rect(screen,p.Color("Black"),p.Rect(SQ_SIZE * c, SQ_SIZE * r, SQ_SIZE+1, SQ_SIZE+1))
                 screen.blit(textObject, textLocation)
+    if gs.GameStatus == False:
+        font = p.font.SysFont('Helvitica', 32, True, False)
+        textObject = font.render("Game Over", 0, p.Color('Red'))
+        textLocation = p.Rect(0, 0, BOARD_WIDTH, BOARD_HIGHT).move(BOARD_WIDTH / 2 - textObject.get_width() / 2, BOARD_HIGHT / 2 - textObject.get_height() / 2)
+        screen.blit(textObject, textLocation)
+        
+    elif gs.Win == True:
+        font = p.font.SysFont('Helvitica', 32, True, False)
+        textObject = font.render("You won :)", 0, p.Color('Red'))
+        textLocation = p.Rect(0, 0, BOARD_WIDTH, BOARD_HIGHT).move(BOARD_WIDTH / 2 - textObject.get_width() / 2, BOARD_HIGHT / 2 - textObject.get_height() / 2)
+        screen.blit(textObject, textLocation)
