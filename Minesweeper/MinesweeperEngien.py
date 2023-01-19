@@ -28,7 +28,7 @@ class MinesweeperEngien:
         elif self.GameBoard[sr][sc] != '*':
             self.DisplayBoard[sr][sc] = self.GameBoard[sr][sc]
         else:
-            self.DisplayBoard[sr][sc] = '*'
+            self.displayMines()
             self.GameStatus = False
             
         if self.GameStatus:
@@ -123,7 +123,11 @@ class MinesweeperEngien:
         if self.DisplayBoard[r][c] == '-':
             self.DisplayBoard[r][c] = 'F'
     
-    
+    def displayMines(self):
+        for r in range(Config.DEMANTION):
+            for c in range(Config.DEMANTION):
+                if self.GameBoard[r][c] == '*':
+                    self.DisplayBoard[r][c] = '*'
     
     
         
