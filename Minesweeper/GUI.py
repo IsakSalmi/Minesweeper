@@ -8,6 +8,7 @@ BOARD_WIDTH = Config.BOARD_WIDTH
 MAX_FPS = Config.MAX_FPS
 DIMENTION = Config.DEMANTION
 SQ_SIZE = Config.SQ_SIDE 
+Flag_image = p.transform.scale(p.image.load("Image/Flag.png"), (SQ_SIZE-4, SQ_SIZE-4))
 
 p.init()
 
@@ -40,7 +41,7 @@ def StartGame():
                         if FirstClick == False: 
                             gs.createBoard(row,col)
                             FirstClick = True
-                        gs.PrintGameboard()
+                            gs.PrintGameboard()
                         gs.SelectSQ(row,col)
                     elif e.button == 3:
                         location = p.mouse.get_pos()
@@ -61,16 +62,20 @@ def drawGameState(screen,gs):
     for r in range(DIMENTION):
         for c in range(DIMENTION):
             if Board[r][c] == '-':
-                p.draw.rect(screen, p.Color('Gray'), p.Rect(SQ_SIZE * c, SQ_SIZE * r, SQ_SIZE+1, SQ_SIZE+1))
+                p.draw.polygon(screen, (53, 171, 57), (((SQ_SIZE * c, SQ_SIZE * r),(SQ_SIZE * c, SQ_SIZE * (r+1)),((SQ_SIZE * (c+1), SQ_SIZE * r)))))
+                p.draw.polygon(screen, (6, 66, 8), (((SQ_SIZE * c, SQ_SIZE * (r+1)),(SQ_SIZE * (c+1), SQ_SIZE * r),((SQ_SIZE * (c+1), SQ_SIZE * (r+1))))))
+                
+                p.draw.rect(screen, (31, 128, 34), p.Rect(SQ_SIZE * c + 4, SQ_SIZE * r + 4, SQ_SIZE-7, SQ_SIZE-7))
             elif Board[r][c] == 'F':
-                p.draw.rect(screen, p.Color('Red'), p.Rect(SQ_SIZE * c, SQ_SIZE * r, SQ_SIZE+1, SQ_SIZE+1))
+                screen.blit(Flag_image, p.Rect(SQ_SIZE * c+4, SQ_SIZE * r, SQ_SIZE, SQ_SIZE))
             elif Board[r][c] == '0':
                 p.draw.rect(screen, p.Color('Black'), p.Rect(SQ_SIZE * c, SQ_SIZE * r, SQ_SIZE+1, SQ_SIZE+1))
             else:
                 textObject = font.render(Board[r][c], 0, p.Color('white'))
-                textLocation = p.Rect((SQ_SIZE * c), (SQ_SIZE * r), (SQ_SIZE + SQ_SIZE * c), (SQ_SIZE + SQ_SIZE * r))
+                textLocation = p.Rect((SQ_SIZE * c + (SQ_SIZE/4)), (SQ_SIZE * r + (SQ_SIZE/4)), (2 * SQ_SIZE * c), (2 * SQ_SIZE * r))
                 p.draw.rect(screen,p.Color("Black"),p.Rect(SQ_SIZE * c, SQ_SIZE * r, SQ_SIZE+1, SQ_SIZE+1))
                 screen.blit(textObject, textLocation)
+                
     if gs.GameStatus == False:
         font = p.font.SysFont('Helvitica', 32, True, False)
         textObject = font.render("Game Over", 0, p.Color('Red'))
