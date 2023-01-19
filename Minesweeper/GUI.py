@@ -9,6 +9,7 @@ MAX_FPS = Config.MAX_FPS
 DIMENTION = Config.DEMANTION
 SQ_SIZE = Config.SQ_SIDE 
 Flag_image = p.transform.scale(p.image.load("Image/Flag.png"), (SQ_SIZE-4, SQ_SIZE-4))
+Bomb_image = p.transform.scale(p.image.load("Image/Bomb.png"), (SQ_SIZE-4, SQ_SIZE-4))
 
 p.init()
 
@@ -68,6 +69,8 @@ def drawGameState(screen,gs):
                 p.draw.rect(screen, (31, 128, 34), p.Rect(SQ_SIZE * c + 4, SQ_SIZE * r + 4, SQ_SIZE-7, SQ_SIZE-7))
             elif Board[r][c] == 'F':
                 screen.blit(Flag_image, p.Rect(SQ_SIZE * c+4, SQ_SIZE * r, SQ_SIZE, SQ_SIZE))
+            elif Board[r][c] == '*':
+                screen.blit(Bomb_image, p.Rect(SQ_SIZE * c+4, SQ_SIZE * r, SQ_SIZE, SQ_SIZE))
             elif Board[r][c] == '0':
                 p.draw.rect(screen, p.Color('Black'), p.Rect(SQ_SIZE * c, SQ_SIZE * r, SQ_SIZE+1, SQ_SIZE+1))
             else:

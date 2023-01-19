@@ -28,7 +28,7 @@ class MinesweeperEngien:
         elif self.GameBoard[sr][sc] != '*':
             self.DisplayBoard[sr][sc] = self.GameBoard[sr][sc]
         else:
-            self.GameBoard[sr][sc] == '*'
+            self.DisplayBoard[sr][sc] = '*'
             self.GameStatus = False
             
         if self.GameStatus:
