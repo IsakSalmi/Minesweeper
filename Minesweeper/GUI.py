@@ -34,8 +34,12 @@ def StartGame():
         for e in p.event.get():
             if e.type == p.QUIT:
                 meny = False
+            elif e.type == p.MOUSEBUTTONDOWN:
+                if  (BOARD_WIDTH-50)/2< p.mouse.get_pos()[0] < (BOARD_WIDTH-50)/2 + 100 and BOARD_HIGHT/2-100 < p.mouse.get_pos()[1] < (BOARD_HIGHT/2-100) + 30:
+                    start = True
+                    meny = False
                 
-        drawStartScreen(Screen,gs)
+        drawStartScreen(Screen)
         Clock.tick(MAX_FPS)
         p.display.flip()
     
@@ -65,13 +69,13 @@ def StartGame():
                         row = int (location[1] // SQ_SIZE)
                         gs.flagSQ(row,col)
                 
-            if ENABLEAI and gs.GameStatus:
-                Move = gsAI.BestMove(gs)
-                if FirstClick == False: 
-                        gs.createBoard(Move[0],Move[1])
-                        FirstClick = True
-                        gs.PrintGameboard()
-                gs.SelectSQ(Move[0],Move[1])
+        if ENABLEAI and gs.GameStatus:
+            Move = gsAI.BestMove(gs)
+            if FirstClick == False: 
+                    gs.createBoard(Move[0],Move[1])
+                    FirstClick = True
+                    gs.PrintGameboard()
+            gs.SelectSQ(Move[0],Move[1])
         drawGameState(Screen,gs)
         Clock.tick(MAX_FPS)
         p.display.flip()
@@ -114,12 +118,15 @@ def drawGameState(screen,gs):
         
         
 def drawStartScreen(Screen):
-    Screen.fill((6, 66, 8))     
+    Screen.fill((6, 66, 8))
+    drawButton(Screen,"start",BOARD_WIDTH/2-50,BOARD_HIGHT/2-100,100,30)   
         
         
 def drawButton(screen,text,x1,y1,x2,y2):
     font = p.font.SysFont('Helvitica', 30, True, False)
     textObject = font.render(text, 0, p.Color('Black'))
     textLocation = p.Rect(x1, y1, x2, y2)
+    p.draw.circle(screen, p.Color("Gray"), [x1+x2, (y1+(y1+y2))/2], y2/2)
+    p.draw.circle(screen, p.Color("Gray"), [x1, (y1+(y1+y2))/2], y2/2)
     p.draw.rect(screen,p.Color("Gray"),textLocation)
-    screen.blit(textObject, textLocation)
+    screen.blit(textObject, textObject.get_rect(center = textLocation.center))
