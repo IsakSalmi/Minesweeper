@@ -78,7 +78,7 @@ class MinesweeperEngien:
         while Mines < self.Mines:
             r = random.randint(0,Config.DEMANTION-1)
             c = random.randint(0,Config.DEMANTION-1)
-            if  (r != sr and c != sc)  and self.GameBoard[r][c] != '*':
+            if ((r != sr) and (c != sc)) and self.GameBoard[r][c] != '*':
                 self.GameBoard[r][c] = '*'
                 for d in directions:
                     endRow = r + d[0]
@@ -95,6 +95,9 @@ class MinesweeperEngien:
                             temp = str(temp)
                             self.GameBoard[endRow][endCol] = temp
                 Mines += 1
+        if self.GameBoard[sr][sc] != '-':
+            self.ResetGame()
+            self.createBoard(sr,sc)
 
     def PrintGameboard(self):
         for r in range(Config.DEMANTION):

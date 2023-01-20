@@ -8,6 +8,9 @@ BOARD_WIDTH = Config.BOARD_WIDTH
 MAX_FPS = Config.MAX_FPS
 DIMENTION = Config.DEMANTION
 SQ_SIZE = Config.SQ_SIDE 
+
+ENABLEAI = Config.ENABLE_AI
+
 Flag_image = p.transform.scale(p.image.load("Image/Flag.png"), (SQ_SIZE-4, SQ_SIZE-4))
 Bomb_image = p.transform.scale(p.image.load("Image/Bomb.png"), (SQ_SIZE-4, SQ_SIZE-4))
 
@@ -17,13 +20,25 @@ p.init()
 def StartGame():
     
     gs = Engien.MinesweeperEngien()
+    gsAI = AI.AI()
     gs.fillBoard()
     FirstClick = False
     
     Screen = p.display.set_mode((BOARD_WIDTH,BOARD_HIGHT))
     Clock = p.time.Clock()
     Screen.fill(p.Color('Black'))
-    start = True
+    start = False
+    meny = True
+    
+    while meny:
+        for e in p.event.get():
+            if e.type == p.QUIT:
+                meny = False
+                
+        drawStartScreen(Screen,gs)
+        Clock.tick(MAX_FPS)
+        p.display.flip()
+    
     while start:
         
         for e in p.event.get():
@@ -34,7 +49,7 @@ def StartGame():
                     gs.ResetGame()
                     FirstClick = False
             elif e.type == p.MOUSEBUTTONDOWN:
-                if gs.GameStatus:
+                if gs.GameStatus and not(ENABLEAI):
                     if e.button == 1:
                         location = p.mouse.get_pos()
                         col = int(location[0] // SQ_SIZE)
@@ -50,12 +65,18 @@ def StartGame():
                         row = int (location[1] // SQ_SIZE)
                         gs.flagSQ(row,col)
                 
-                
+            if ENABLEAI and gs.GameStatus:
+                Move = gsAI.BestMove(gs)
+                if FirstClick == False: 
+                        gs.createBoard(Move[0],Move[1])
+                        FirstClick = True
+                        gs.PrintGameboard()
+                gs.SelectSQ(Move[0],Move[1])
         drawGameState(Screen,gs)
         Clock.tick(MAX_FPS)
         p.display.flip()
-        
-        
+ 
+ 
         
 def drawGameState(screen,gs):
     Board = gs.GetBoard()
@@ -90,3 +111,15 @@ def drawGameState(screen,gs):
         textObject = font.render("You won :)", 0, p.Color('Red'))
         textLocation = p.Rect(0, 0, BOARD_WIDTH, BOARD_HIGHT).move(BOARD_WIDTH / 2 - textObject.get_width() / 2, BOARD_HIGHT / 2 - textObject.get_height() / 2)
         screen.blit(textObject, textLocation)
+        
+        
+def drawStartScreen(Screen):
+    Screen.fill((6, 66, 8))     
+        
+        
+def drawButton(screen,text,x1,y1,x2,y2):
+    font = p.font.SysFont('Helvitica', 30, True, False)
+    textObject = font.render(text, 0, p.Color('Black'))
+    textLocation = p.Rect(x1, y1, x2, y2)
+    p.draw.rect(screen,p.Color("Gray"),textLocation)
+    screen.blit(textObject, textLocation)
