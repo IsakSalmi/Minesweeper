@@ -11,9 +11,10 @@ class AI:
 
     def BestMove(self,gs):
         board = gs.GetBoard()
+        directions = ((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1))
         if self.firstClick:
             self.r = random.randint(0,Config.DEMANTION-1)
             self.c = random.randint(0,Config.DEMANTION-1)
             self.firstClick = False
             return (self.r,self.c)
-        return (1,1)
+        return(1,1)
